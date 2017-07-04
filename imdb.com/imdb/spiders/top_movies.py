@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import urllib.parse
-
+import os.path
 
 class TopMoviesSpider(scrapy.Spider):
     name = 'top_movies'
@@ -24,7 +24,11 @@ class TopMoviesSpider(scrapy.Spider):
         	for i in range(l):
         		r = float(rating[i])
         		sum_rationg += r
+        		imdb_id = os.path.split(url[i])
+        		while(imdb_id[-1] == '' and imdb_id[0] != ''):
+        			imdb_id = os.path.split(imdb_id[0])
         		yield {
+        			"imdb_id": imdb_id[-1],
         			"rank": int(float(rank[i])),
         			"title": title[i],
         			"url": urllib.parse.urljoin("http://www.imdb.com/", url[i]),
